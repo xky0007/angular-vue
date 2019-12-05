@@ -132,7 +132,7 @@ var password = document.getElementById('password').val();
     <div>最新的email为：{{email}}</div>
 </div>
 ```
-！[vue-双向绑定](./gif/vue-双向绑定.gif)
+![vue-双向绑定](./gif/vue-双向绑定.gif)
 
 ##### angular
 
@@ -188,7 +188,7 @@ var password = document.getElementById('password').val();
     ```
 效果如下：
 
-！[vue-事件](./gif/vue-事件.gif)
+![vue-事件](./gif/vue-事件.gif)
 
 ##### angular
 
@@ -243,7 +243,7 @@ var password = document.getElementById('password').val();
     }
     ```
 **注意**当v-if的变量表达式为false时，dom中是看不到这个元素的。效果如下：
-！[vue-条件](./gif/vue-条件.gif)
+![vue-条件](./gif/vue-条件.gif)
 
 ###### angular
 
