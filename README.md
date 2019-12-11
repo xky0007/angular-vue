@@ -36,15 +36,19 @@ AngularJs诞生于2009年，起先也是类似于现在VueJs一样的，只需�
 ---
 由于本人之前只用过Angular，vue的经验不多，具目前的使用来看大概分为几个部分，我将一一对比Angular和vuejs的代码。所有的代码我都会放在stackblitz: [vuejs](https://stackblitz.com/edit/js-ducfaz)和[angular](https://stackblitz.com/edit/angular-gswt3k)
 
-1. 插值
-2. 双向绑定
-3. 组件事件
-4. 根据传入值动态变化css
-5. 条件、循环调用组件和组件复用
-6. 将值传入子组件
-7. 子组件事件上浮至父组件
+*[1. 插值](#s1)
 
-#### 1. 插值
+*[2. 双向绑定](#s2)
+
+*[3. 组件事件](#s3)
+
+*[4. 条件、循环调用组件和组件复用](#s4)
+
+*[5. 将值传入子组件](#s5)
+
+*[6. 子组件事件上浮至父组件](#s6)
+
+<h4 id="s1">1. 插值<h4>
 
 ##### Vuejs:
 
@@ -106,7 +110,7 @@ app.component.html
 ![angular-插值](./images/angular-插值.jpg)
 
 
-#### 2. 双向绑定
+<h4 id="s2">2. 双向绑定</h4>
 
 在mvvm中，双向绑定是一个非常方便且很有必要的功能，在纯js中，如果我们有两个input让用户来输入他的邮箱和密码，再点击登录按钮登录，需要使用类似的代码
 ```
@@ -153,7 +157,7 @@ var password = document.getElementById('password').val();
 ```
 可以发现代码几乎完全一样，唯一的却别在于`[(ngModel)]="email"`和`v-model="email"`。
 
-#### 3.事件
+<h4 id="s3">3.事件</h4>
 
 与双相绑定一样，angular和vue的事件绑定也非常类似。
 
@@ -216,7 +220,7 @@ var password = document.getElementById('password').val();
     ```
 即可得到相同的效果，主要区别在于vue使用`v-on:click="addOne"`而angular使用`(click)="addOne()"`，*注意angular中的函数括号不可省略*
 
-#### 4.条件、循环调用组件和组件复用
+<h4 id="s4">4.条件、循环调用组件和组件复用</h4>
 
 首先来看条件，从前面的插值、双向绑定和事件，能看出来vue和angular是非常相似的，这一点在条件和循环调用也是一样的。
 
@@ -426,3 +430,5 @@ html:
 **vue:** `v-for="person in people"` 和 **angular:** `*ngFor="let person of people"`。
 
 *从前面的几个部分可以看出来，如果你会写vue，那么angular其实也会了，反之亦然。*
+
+<h4 id="s5">5. 将值传入子组件</h4>
