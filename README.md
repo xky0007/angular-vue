@@ -432,3 +432,48 @@ html:
 *从前面的几个部分可以看出来，如果你会写vue，那么angular其实也会了，反之亦然。*
 
 <h4 id="s5">5. 将值传入子组件</h4>
+
+##### vue
+
+在vue的官方文档中，vue实例有一个叫props的字段，可以定义传入的变量名，这样可以在调用自定义组件时绑定相应。假设我们有一个自定义的子组件，组件接受一个数组并在表格中显示所有的数据。就拿之前的一步做例子，我们新建并注册一个vue的component。
+
+```
+var personComponent = Vue.component('personComponent',{
+  props:['people'],
+  template:`
+    <div>
+      <table>
+        <thead>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Address</th>
+        </thead>
+        <tbody>
+         <tr v-for="person in people">
+           <td>{{person.name}}</td>
+           <td>{{person.phone}}</td>
+           <td>{{person.addr}}</td>
+         </tr>
+        </tbody>
+      </table>
+    </div>
+    `
+})
+```
+***注册component必须放在vue的实例之前***
+
+这里我们把前一步的table和循环放在了一个子组件里，这样我们可以在任意的地方调用这个子组件并传入相应的值。当我们需要在不同的地方使用同一块html的时候，组件会非常有用。
+
+调用：
+```
+<!-- 子组件传入 -->
+<hr/>
+<h4>子组件传入</h4>
+<person-component v-bind:people="people"></person-component>
+```
+
+这里`v-bind:people="people"`中`v-bind:people`里的`people`是指的子组件里的props的值，而`="people"`是指的父组件（调用组件域）中的data里的`people`变量。
+
+**注意：** 可能会疑惑为什么我们注册的component的名字为`personComponent`而调用的时候是使用`<person-component>`，这里就不多赘述，详情请看[vue官方文档](https://cn.vuejs.org/v2/guide/components-registration.html#%E7%BB%84%E4%BB%B6%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99)
+
+组件化或者模块化可以把复杂、大量的html分成简洁明了的代码，这在维护一个非常大、复杂的页面时是非常有用的。
