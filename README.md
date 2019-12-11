@@ -153,7 +153,7 @@ var password = document.getElementById('password').val();
 ```
 可以发现代码几乎完全一样，唯一的却别在于`[(ngModel)]="email"`和`v-model="email"`。
 
-#### 事件
+#### 3.事件
 
 与双相绑定一样，angular和vue的事件绑定也非常类似。
 
@@ -216,7 +216,7 @@ var password = document.getElementById('password').val();
     ```
 即可得到相同的效果，主要区别在于vue使用`v-on:click="addOne"`而angular使用`(click)="addOne()"`，*注意angular中的函数括号不可省略*
 
-#### 条件、循环调用组件和组件复用
+#### 4.条件、循环调用组件和组件复用
 
 首先来看条件，从前面的插值、双向绑定和事件，能看出来vue和angular是非常相似的，这一点在条件和循环调用也是一样的。
 
@@ -279,15 +279,150 @@ var password = document.getElementById('password').val();
 <div>
     <h4>条件2</h4>
     <template v-if="showMsg2">
-    <div>这是一条信息</div>
-    <div>这是一条信息</div>
+      <div>这是一条信息</div>
+      <div>这是一条信息</div>
     </template>
     <template v-else>
-    <div>这是另一条信息</div>
-    <div>这是另一条信息</div>
+      <div>这是另一条信息</div>
+      <div>这是另一条信息</div>
     </template>
     <button @click="changeShowMsg2">改变showMsg</button>
 </div>
 ```
 
 当我们的if-else模板中的tag多余一个，我们也必须使用`template`，这样就和angular基本一致了。唯一的区别在于angular的else是需要放在`*ngIf`语句中，而vue是分开的。
+
+##### 循环
+
+接下来是另一个重要的指令-循环
+
+假设我们有一个包含n个`Person`对象的数组`People`，如果不使用任何框架（包括mvc），那么n个对象以为着我们要重复的写n遍html来显示所有对象的字段，而如果用循环，只需要写一次并放入循环即可。
+
+##### vue
+
+1. 在data中添加一个数组如下:
+    ```
+    people:[
+      {name: 'Jack', phone: '123-123-3456', addr: 'NYC'},
+      {name: 'Tom', phone: '123-123-1234', addr: 'CT'},
+      {name: 'Bell', phone: '123-123-5678', addr: 'CL'}
+    ]
+    ```
+
+2. 在css中添加table样式如下：
+    ```
+    td,th{
+      border:1px solid;
+      padding: 5px;
+    }
+    table{
+      border-collapse:collapse;
+      text-align:center;
+    }
+    ```
+
+3. 在html添加如下代码：
+    ```
+    <!-- 循环 -->
+    <hr/>      
+    <h4>循环</h4>
+    <div>
+      <table>
+        <thead>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Address</th>
+        </thead>
+        <tbody>
+        <tr v-for="person in people">
+          <td>{{person.name}}</td>
+          <td>{{person.phone}}</td>
+          <td>{{person.addr}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    ```
+注意`v-for="person in people"`这里的people是`data`里的`person`，名字要保持一致，而`person`可以当成我们赋予的本地变量，就像`c#`中的`for(var item in people)`一样
+
+无论数组中有多少个item，都会自动渲染出来，效果图如下：
+
+![vue-循环](./images/vue-循环.jpg)
+
+##### angular
+
+angular的代码和vue并不会有太大的区别，但是因为angular是用ts的，我们可以指定`Person`和`People`的类型，也可以不指定而使用js风格，代码如下：
+
+**ts**
+
+修改后的`app.component.ts`代码如下
+```
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  message = 'hello world';
+  email: string = 'x@zx.com';
+  count: number = 0;
+  showMsg: boolean = true;
+  people:Person[] = [
+    new Person('Jack','123-123-3456','NYC'),
+    new Person('Tom','123-123-1234','CT'),
+    new Person('Bell','123-123-5678','CL'),
+  ];
+
+  addOne() {
+    this.count++;
+  }
+
+  changeShowMsg() {
+    this.showMsg = !this.showMsg;
+  }
+}
+
+export class Person{
+  constructor(public name:string, public phone:string, public addr:string){}
+}
+```
+
+若不想声明一个Person类，下面的代码等效：
+``` 
+people = [
+  {name: 'Jack', phone: '123-123-3456', addr: 'NYC'},
+  {name: 'Tom', phone: '123-123-1234', addr: 'CT'},
+  {name: 'Bell', phone: '123-123-5678', addr: 'CL'}
+]  
+```
+
+html:
+```
+<!-- 循环 -->
+<hr />
+<h4>循环</h4>
+<div>
+	<table>
+		<thead>
+			<th>Name</th>
+			<th>Phone</th>
+			<th>Address</th>
+		</thead>
+		<tbody>
+			<tr *ngFor="let person of people">
+				<td>{{person.name}}</td>
+				<td>{{person.phone}}</td>
+				<td>{{person.addr}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+```
+
+可以发现html中唯一的区别在于是：
+
+**vue:** `v-for="person in people"` 和 **angular:** `*ngFor="let person of people"`。
+
+*从前面的几个部分可以看出来，如果你会写vue，那么angular其实也会了，反之亦然。*
