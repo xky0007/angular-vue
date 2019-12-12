@@ -539,3 +539,84 @@ var personComponent = Vue.component('personComponent',{
 vue中的`props`等价于angular中`@Input()`
 
 vue中`v-bind:people="people"`等价于angular中的`[people]="people"`。
+
+<h4 id="s6">6. 子组件事件上浮至父组件</h4>
+
+有传入就有传出，当我们需要把子组件的事件上浮到父组件中处理时，就需要把事件上浮。还是首先来看vue
+
+##### vue
+
+1. 在子组件`personComponent`的模板中的`<tbody>`末尾添加, 点击按扭emit一个名为`change-person`的事件，需要在父组件中绑定，并传出参数person
+    ```           
+    <td>
+      <button @click="$emit('change-person',person)">Change</button>
+    </td>
+    ```
+2. 在html中添加代码，监听子组件中的事件名称并绑定方法：
+
+    **注意这里的```v-on:change-person="changePerson"```中的change-person与模板中的$emit一致，而changePerson是父组件中的方法名称**
+
+    ```
+    <!-- 子组件事件上浮 -->
+    <hr/>
+    <h4>子组件事件上浮</h4>
+    <person-component v-bind:people="people" v-on:change-person="changePerson"></person-component>
+    ```
+3. 在父组件中添加方法如下，这个方法可以将子组件传出的值打印在控制台以方便我们观察：
+
+    ```
+    changePerson:function(event){
+      console.log(event);
+    }
+    ```
+最终的效果如下：
+
+![vue-事件上浮](./gif/vue-事件上浮.gif)
+
+##### angular
+
+接下来是angular，在angular中的传入是Input，那么你可能已经猜到了上浮有可能是Output，答对了！
+
+1. 首先修改子组件的ts文件，添加一个Output的事件变量并导入`EventEmitter`和`Output` 的类,最后再添加事件上浮的方法：
+
+    ```
+    import { Component, Input, Output, EventEmitter } from '@angular/core';
+    ```
+
+    ```
+    @Output() selectedPerson = new EventEmitter();
+
+    changePerson(e){
+      this.selectedPerson.emit(e);
+    }
+    ```
+
+2. 修改子组件html文件，添加按钮和事件，angular的话子组件里只需要设置参数即可：
+    ```
+    <td>
+      <button (click)="changePerson(person)">Change</button>
+    </td>
+    ```
+
+3. 在父组件`app.component.html`中添加子组件并绑定本地方法,这里的`selectedPerson`与子组件中Output变量名一致，也可以设置其他名字，具体步骤可以搜索angular的官方文档:
+
+    ```
+    <!-- 事件上浮 -->
+    <hr />
+    <h4>事件上浮</h4>
+    <person-component [people]="people" (selectedPerson)="changePerson($event)"></person-component>
+    ```
+
+    **app.component.ts：**
+    ```
+    changePerson(e){
+      console.log(e);
+    }
+    ```
+
+对比angular和vue可以发现他们的流程都是一样的，几个步骤如下：
+
+1. 在子组件中emit一个事件
+2. 在父组件中设定一个变量和方法与上浮的事件进行绑定
+3. 调用方法
+
