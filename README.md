@@ -477,3 +477,65 @@ var personComponent = Vue.component('personComponent',{
 **注意：** 可能会疑惑为什么我们注册的component的名字为`personComponent`而调用的时候是使用`<person-component>`，这里就不多赘述，详情请看[vue官方文档](https://cn.vuejs.org/v2/guide/components-registration.html#%E7%BB%84%E4%BB%B6%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99)
 
 组件化或者模块化可以把复杂、大量的html分成简洁明了的代码，这在维护一个非常大、复杂的页面时是非常有用的。
+
+##### angular
+
+在一个angular项目中添加一个component后需要主动导入到根module中，这是因为避免加载过多的未使用的component而导致项目体积过大。*如果你使用angular cli，则使用`ng g component <component-name>`会自动导入。在stackblitz中由于无法使用`angular cli`，则必须手动添加component和导入，步骤如下：
+
+1. 在app目录下新建一个文件夹名为`person-component`
+
+2. 在`person-component`文件下添加`person-component.component.ts`,`person-component.component.html`,`person-component.component.css`三个文件
+
+3. 在ts文件中添加如下代码：
+    ```
+    import { Component, Input } from '@angular/core';
+
+    @Component({
+      selector: 'person-component',
+      templateUrl: './person-component.component.html',
+      styleUrls: ['./person-component.component.css']
+    })
+    export class PersonComponent {
+      @Input() people:any;
+    }
+
+    ```
+4. 在html文件中添加如下代码：
+    ```
+    <div>
+      <table>
+        <thead>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Address</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let person of people">
+            <td>{{person.name}}</td>
+            <td>{{person.phone}}</td>
+            <td>{{person.addr}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    ```
+5. 打开`app.module.ts`文件并在导入部分添加`import { PersonComponent } from './person-component/person-component.component';`，再在`declarations`数组中添加`PersonComponent`，导入完成。
+
+6. 在`app.component.html`中添加如下代码：
+
+    ```
+    <!-- 子组件传入 -->
+    <hr />
+    <h4>子组件传入</h4>
+    <person-component [people]="people"></person-component>
+    ```
+
+即可得到相同的效果，效果图如下：
+
+![angular-子组件](./images/angular-子组件.jpg)
+  
+**解析：**
+
+vue中的`props`等价于angular中`@Input()`
+
+vue中`v-bind:people="people"`等价于angular中的`[people]="people"`。
